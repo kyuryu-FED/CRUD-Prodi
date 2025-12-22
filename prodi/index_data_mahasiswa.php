@@ -1,20 +1,22 @@
 <?php
-include("koneksi.php");
+include("../koneksi.php"); // sesuaikan path
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daftar Mahasiswa</title>
+    <title>List Data Mahasiswa</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand px-5" href="prodi/index_data_mahasiswa.php">Akademik</a>
+    <a class="navbar-brand px-5" href="index_data_mahasiswa.php">Akademik</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
       aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +26,7 @@ include("koneksi.php");
       <div class="navbar-nav ms-auto px-4">
 
 <div class="navbar-nav ms-auto px-5 d-flex gap-3">
-  <a class="nav-link active" aria-current="page" href="prodi/index_data_mahasiswa.php">Home</a>
+  <a class="nav-link active" aria-current="page" href="index_data_mahasiswa.php">Home</a>
 
   <!-- Dropdown Mahasiswa -->
   <div class="nav-item dropdown" data-bs-theme="dark">
@@ -36,8 +38,8 @@ include("koneksi.php");
     </button>
 
     <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item active" href="create.php">Daftar Mahasiswa</a></li>
-      <li><a class="dropdown-item" href="index.php">Tambah Mahasiswa</a></li>
+      <li><a class="dropdown-item active" href="../create.php">Daftar Mahasiswa</a></li>
+      <li><a class="dropdown-item" href="../index.php">Tambah Mahasiswa</a></li>
     </ul>
   </div>
 
@@ -51,8 +53,8 @@ include("koneksi.php");
     </button>
 
     <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item active" href="prodi/data_prodi.php">Daftar Prodi</a></li>
-      <li><a class="dropdown-item" href="prodi/create_prodi.php">Tambah Prodi</a></li>
+      <li><a class="dropdown-item active" href="data_prodi.php">Daftar Prodi</a></li>
+      <li><a class="dropdown-item" href="create_prodi.php">Tambah Prodi</a></li>
     </ul>
   </div>
 
@@ -62,9 +64,10 @@ include("koneksi.php");
   </div>
 </nav>
 
+<!-- CONTENT -->
 <div class="container mt-5">
   <div class="bg-white p-4 rounded shadow-sm">
-    <h3 class="mb-3 fw-bold">Daftar Mahasiswa</h3>
+    <h3 class="mb-3 fw-bold">Data Mahasiswa</h3>
 
     <table class="table table-bordered align-middle text-center">
       <thead class="table-primary">
@@ -79,39 +82,58 @@ include("koneksi.php");
         </tr>
       </thead>
       <tbody>
+       <tbody>
+<?php
+$no = 1;
+$query = "
+    SELECT 
+        mahasiswa.id,
+        mahasiswa.nim,
+        mahasiswa.nama_mhs,
+        mahasiswa.tgl_lahir,
+        mahasiswa.alamat,
+        prodi.nama_prodi,
+        prodi.jenjang,
+        prodi.keterangan
+    FROM mahasiswa
+    LEFT JOIN prodi ON mahasiswa.prodi_id = prodi.id
+    ORDER BY mahasiswa.id DESC
+";
 
-        <?php
-        $no = 1;
-        $query = "
-            SELECT mahasiswa.*, prodi.nama_prodi
-            FROM mahasiswa
-            LEFT JOIN prodi ON mahasiswa.prodi_id = prodi.id
-            ORDER BY mahasiswa.id DESC
-        ";
-        $sql = mysqli_query($db, $query);
 
-        while ($data = mysqli_fetch_assoc($sql)) {
-        ?>
-            <tr>
-                <td><?= $no++ ?></td>
-                <td><?= $data['nim'] ?></td>
-                <td><?= $data['nama_mhs'] ?></td>
-                <td><?= $data['tgl_lahir'] ?></td>
-                <td><?= $data['alamat'] ?></td>
-                <td><?= $data['nama_prodi'] ?? '-' ?></td>
-                <td>
-                    <a href="edit.php?id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="delete.php?id=<?= $data['id'] ?>" 
-                       onclick="return confirm('Hapus data?')" 
-                       class="btn btn-danger btn-sm">Hapus</a>
-                </td>
-            </tr>
-        <?php } ?>
+$sql = mysqli_query($db, $query);
 
-        </tbody>
+while ($data = mysqli_fetch_assoc($sql)) {
+?>
+    <tr>
+        <td><?= $no++ ?></td>
+        <td><?= $data['nama_mhs'] ?></td>
+        <td><?= $data['nim'] ?></td>
+        <td><?= $data['tgl_lahir'] ?></td>
+        <td><?= $data['alamat'] ?></td>
+        <td>    <?= 
+        ($data['nama_prodi'] ?? '-') . ' ' .
+        ($data['jenjang'] ?? '') . ' ' .
+        ($data['keterangan'] ?? '')
+    ?></td>
+        <td>
+            <a href="../edit.php?id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">
+                Edit
+            </a>
+            <a href="../delete.php?id=<?= $data['id'] ?>"
+               onclick="return confirm('Hapus data?')"
+               class="btn btn-danger btn-sm">
+                Hapus
+            </a>
+        </td>
+    </tr>
+<?php } ?>
+</tbody>
+
+      </tbody>
     </table>
 
-    <a href="index.php" class="btn btn-primary">Tambah Data</a>
+  </div>
 </div>
 
 </body>
