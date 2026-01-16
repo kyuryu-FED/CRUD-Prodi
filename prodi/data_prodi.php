@@ -12,53 +12,55 @@ include("../koneksi.php");
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand px-5" href="index_data_mahasiswa.php">Akademik</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav ms-auto px-4">
+    <div class="container-fluid">
 
-<div class="navbar-nav ms-auto px-5 d-flex gap-3">
-  <a class="nav-link active" aria-current="page" href="index_data_mahasiswa.php">Home</a>
+        <a class="navbar-brand px-5" href="selamat_datang.php">Akademik</a>
 
-  <!-- Dropdown Mahasiswa -->
-  <div class="nav-item dropdown" data-bs-theme="dark">
-    <button class="btn btn-secondary dropdown-toggle flex-fill px-4"
-            type="button"
-            id="dropdownMahasiswa"
-            data-bs-toggle="dropdown">
-      Mahasiswa
-    </button>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNavAltMarkup">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item active" href="../create.php">Daftar Mahasiswa</a></li>
-      <li><a class="dropdown-item" href="../index.php">Tambah Mahasiswa</a></li>
-    </ul>
-  </div>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ms-auto px-5 d-flex gap-3 align-items-center">
 
-  <!-- Dropdown Prodi -->
-  <div class="nav-item dropdown" data-bs-theme="dark">
-    <button class="btn btn-secondary dropdown-toggle flex-fill px-4"
-            type="button"
-            id="dropdownProdi"
-            data-bs-toggle="dropdown">
-      Prodi
-    </button>
+                <a class="nav-link active" href="../prodi/index_data_mahasiswa.php">Home</a>
 
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item active" href="data_prodi.php">Daftar Prodi</a></li>
-      <li><a class="dropdown-item" href="create_prodi.php">Tambah Prodi</a></li>
-    </ul>
-  </div>
+                <!-- Dropdown Mahasiswa -->
+                <div class="nav-item dropdown" data-bs-theme="dark">
+                    <button class="btn btn-secondary dropdown-toggle px-4"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                        Mahasiswa
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="../create.php">Daftar Mahasiswa</a></li>
+                        <li><a class="dropdown-item" href="../index.php">Tambah Mahasiswa</a></li>
+                    </ul>
+                </div>
 
-</div>
-      </div>
+                <!-- Dropdown Prodi -->
+                <div class="nav-item dropdown" data-bs-theme="dark">
+                    <button class="btn btn-secondary dropdown-toggle px-4"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                        Prodi
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="data_prodi.php">Daftar Prodi</a></li>
+                        <li><a class="dropdown-item" href="create_prodi.php">Tambah Prodi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Login / Profile -->
+                <a class="nav-link active" href="../login/sudah_login.php">Login</a>
+                <a class="nav-link active" href="../login/profile.php">Profile</a>
+                <a class="nav-link text-danger" href="../login/logout.php">Logout</a>
+
+            </div>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div class="container mt-5">
@@ -79,7 +81,7 @@ include("../koneksi.php");
 
   <?php
   $no = 1;
-  $sql = mysqli_query($db, "SELECT * FROM prodi ORDER BY id DESC");
+  $sql = mysqli_query($koneksi, "SELECT * FROM prodi ORDER BY id DESC");
   while ($data = mysqli_fetch_assoc($sql)) {
   ?>
     <tr>
@@ -102,8 +104,9 @@ include("../koneksi.php");
 
   </tbody>
 </table>
-
+  <a href="create_prodi.php" class="btn btn-primary">Tambah Data</a>
   </div>
+  
 </div>
 
 </body>

@@ -12,11 +12,7 @@ if (!$id) {
     exit;
 }
 
-/*
-  CEK APAKAH PRODI DIPAKAI DI TABEL MAHASISWA
-  (supaya data konsisten)
-*/
-$cek = mysqli_query($db, "
+$cek = mysqli_query($koneksi, "
     SELECT COUNT(*) AS total 
     FROM mahasiswa 
     WHERE prodi_id = '$id'
@@ -32,7 +28,7 @@ if ($row['total'] > 0) {
 }
 
 // hapus data prodi
-$hapus = mysqli_query($db, "DELETE FROM prodi WHERE id='$id'");
+$hapus = mysqli_query($koneksi, "DELETE FROM prodi WHERE id='$id'");
 
 if ($hapus) {
     echo "<script>
@@ -40,6 +36,6 @@ if ($hapus) {
             window.location='data_prodi.php';
           </script>";
 } else {
-    echo "Gagal hapus: " . mysqli_error($db);
+    echo "Gagal hapus: " . mysqli_error($koneksi);
 }
 ?>

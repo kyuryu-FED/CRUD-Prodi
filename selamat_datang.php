@@ -1,17 +1,25 @@
 <?php
-include("koneksi.php");
+session_start();
+
+if (!isset($_SESSION['pengguna']) || $_SESSION['pengguna'] !== true) {
+    header("Location: login/login.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="utf-8">
+    <title>Selamat Datang</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daftar Mahasiswa</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body class="bg-light">
 
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
     <div class="container-fluid">
 
@@ -49,7 +57,7 @@ include("koneksi.php");
                         Prodi
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="prodi/data_prodi.php">Daftar Prodi</a></li>
+                        <li><a class="dropdown-item" href=prodi/data_prodi.php">Daftar Prodi</a></li>
                         <li><a class="dropdown-item" href="prodi/create_prodi.php">Tambah Prodi</a></li>
                     </ul>
                 </div>
@@ -64,56 +72,21 @@ include("koneksi.php");
     </div>
 </nav>
 
+<!-- CONTENT -->
 <div class="container mt-5">
-  <div class="bg-white p-4 rounded shadow-sm">
-    <h3 class="mb-3 fw-bold">Daftar Mahasiswa</h3>
+    <div class="bg-white p-4 rounded shadow-sm">
 
-    <table class="table table-bordered align-middle text-center">
-      <thead class="table-primary">
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>NIM</th>
-          <th>Tanggal Lahir</th>
-          <th>Alamat</th>
-          <th>Prodi</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <?php
-        $no = 1;
-        $query = "
-            SELECT mahasiswa.*, prodi.nama_prodi
-            FROM mahasiswa
-            LEFT JOIN prodi ON mahasiswa.prodi_id = prodi.id
-            ORDER BY mahasiswa.id DESC
-        ";
-        $sql = mysqli_query($koneksi, $query);
-
-        while ($data = mysqli_fetch_assoc($sql)) {
-        ?>
-            <tr>
-                <td><?= $no++ ?></td>
-                <td><?= $data['nim'] ?></td>
-                <td><?= $data['nama_mhs'] ?></td>
-                <td><?= $data['tgl_lahir'] ?></td>
-                <td><?= $data['alamat'] ?></td>
-                <td><?= $data['nama_prodi'] ?? '-' ?></td>
-                <td>
-                    <a href="edit.php?id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="delete.php?id=<?= $data['id'] ?>" 
-                       onclick="return confirm('Hapus data?')" 
-                       class="btn btn-danger btn-sm">Hapus</a>
-                </td>
-            </tr>
-        <?php } ?>
-
-        </tbody>
-    </table>
-
-    <a href="index.php" class="btn btn-primary">Tambah Data</a>
+        <h3 class="mb-3 fw-bold">
+            Selamat Datang,
+            <span class="">
+                <?= htmlspecialchars($_SESSION['nama']) ?> 👋
+            </span>
+            
+        </h3>
+        <p>
+          Ini adalah Website Akademik
+        </p>
+    </div>
 </div>
 
 </body>

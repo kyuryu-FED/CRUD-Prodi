@@ -4,10 +4,9 @@ $user = "root";
 $password = "";
 $db_name = "db_akademik";
 
-$db = mysqli_connect($host, $user, $password, $db_name);
+$koneksi = mysqli_connect($host, $user, $password, $db_name);
 
-if (!$db) {
-    echo "Koneksi error: " . mysqli_connect_error();
-    exit;
+if (!$koneksi) {
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
 ?>

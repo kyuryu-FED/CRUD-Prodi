@@ -1,23 +1,25 @@
 <?php
-include("../koneksi.php"); // sesuaikan path
+session_start();
+
+if (!isset($_SESSION['pengguna']) || $_SESSION['pengguna'] !== true) {
+    header("Location: login.php");
+    exit;
+}
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>List Data Mahasiswa</title>
-
+    <title>Status Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="bg-light">
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
     <div class="container-fluid">
 
-        <a class="navbar-brand px-5" href="selamat_datang.php">Akademik</a>
+        <a class="navbar-brand px-5" href="../selamat_datang.php">Akademik</a>
 
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
@@ -57,85 +59,49 @@ include("../koneksi.php"); // sesuaikan path
                 </div>
 
                 <!-- Login / Profile -->
-                <a class="nav-link active" href="../login/sudah_login.php">Login</a>
-                <a class="nav-link active" href="../login/profile.php">Profile</a>
-                <a class="nav-link text-danger" href="../login/logout.php">Logout</a>
+                <a class="nav-link active" href="sudah_login.php">Login</a>
+                <a class="nav-link active" href="profile.php">Profile</a>
+                <a class="nav-link text-danger" href="logout.php">Logout</a>
 
             </div>
         </div>
     </div>
 </nav>
 
-<!-- CONTENT -->
-<div class="container mt-5">
-  <div class="bg-white p-4 rounded shadow-sm">
-    <h3 class="mb-3 fw-bold">Data Mahasiswa</h3>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-    <table class="table table-bordered align-middle text-center">
-      <thead class="table-primary">
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>NIM</th>
-          <th>Tanggal Lahir</th>
-          <th>Alamat</th>
-          <th>Prodi</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-       <tbody>
-<?php
-$no = 1;
-$query = "
-    SELECT 
-        mahasiswa.id,
-        mahasiswa.nim,
-        mahasiswa.nama_mhs,
-        mahasiswa.tgl_lahir,
-        mahasiswa.alamat,
-        prodi.nama_prodi,
-        prodi.jenjang,
-        prodi.keterangan
-    FROM mahasiswa
-    LEFT JOIN prodi ON mahasiswa.prodi_id = prodi.id
-    ORDER BY mahasiswa.id DESC
-";
+            <div class="card shadow rounded-4">
+                <div class="card-body p-4 text-center">
 
+                    <h4 class="fw-bold mb-3 text-success">
+                        Kamu sudah login
+                    </h4>
 
-$sql = mysqli_query($koneksi, $query);
+                    <p class="mb-2">
+                        Login sebagai:
+                        <strong><?= htmlspecialchars($_SESSION['nama']) ?></strong>
+                    </p>
 
-while ($data = mysqli_fetch_assoc($sql)) {
-?>
-    <tr>
-        <td><?= $no++ ?></td>
-        <td><?= $data['nama_mhs'] ?></td>
-        <td><?= $data['nim'] ?></td>
-        <td><?= $data['tgl_lahir'] ?></td>
-        <td><?= $data['alamat'] ?></td>
-        <td>    <?= 
-        ($data['nama_prodi'] ?? '-') . ' ' .
-        ($data['jenjang'] ?? '') . ' ' .
-        ($data['keterangan'] ?? '')
-    ?></td>
-        <td>
-            <a href="../edit.php?id=<?= $data['id'] ?>" class="btn btn-warning btn-sm">
-                Edit
-            </a>
-            <a href="../delete.php?id=<?= $data['id'] ?>"
-               onclick="return confirm('Hapus data?')"
-               class="btn btn-danger btn-sm">
-                Hapus
-            </a>
-        </td>
-    </tr>
-<?php } ?>
-</tbody>
+                    <p class="text-muted mb-4">
+                        Email: <?= htmlspecialchars($_SESSION['email']) ?>
+                    </p>
 
-      </tbody>
-    </table>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="../selamat_datang.php" class="btn btn-secondary">
+                            Kembali
+                        </a>
+                        <a href="logout.php" class="btn btn-danger">
+                            Logout
+                        </a>
+                    </div>
 
-  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 </body>
